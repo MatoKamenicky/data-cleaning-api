@@ -138,10 +138,3 @@ This API is ready for deployment on: - Railway - Render - Fly.io -
 Docker / VPS
 
 Set the `API_KEY` environment variable in your hosting provider.
-
-
-## 💰 Monetization
-
-This API is designed to be published on **RapidAPI**: - API key
-authentication - JSON-first endpoints - Clear request limits -
-SaaS-friendly architecture
