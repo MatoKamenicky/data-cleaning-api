@@ -1,0 +1,22 @@
+[
+  {
+    "age": 25,
+    "salary": 50000,
+    "city": "Berlin"
+  },
+  {
+    "age": null,
+    "salary": 52000,
+    "city": "Paris"
+  },
+  {
+    "age": 45,
+    "salary": null,
+    "city": null
+  },
+  {
+    "age": 120,
+    "salary": 1000000,
+    "city": "London"
+  }
+]
