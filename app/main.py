@@ -1,4 +1,4 @@
-from fastapi import FastAPI, UploadFile, File, HTTPException, Depends, Header
+from fastapi import FastAPI, UploadFile, File, HTTPException, Depends, Security
 import pandas as pd
 from typing import List, Dict, Any
 import os
@@ -10,20 +10,22 @@ from app.schemas import CleanResponse, ValidationResponse
 
 # Configuration
 
-API_KEY = os.getenv("API_KEY", "dev-key")
+API_KEY = os.getenv("API_KEY")
 MAX_FILE_SIZE = 10 * 1024 * 1024  # 10 MB
 MAX_ROWS = 100_000
 
 
 # Auth
 
-api_key_header = APIKeyHeader(
-    name="x-api-key",
-    auto_error=False
-)
+api_key_header = APIKeyHeader(name="x-api-key", auto_error=False)
+rapidapi_key_header = APIKeyHeader(name="X-RapidAPI-Key", auto_error=False)
 
-def verify_api_key(api_key: str = Depends(api_key_header)):
-    if api_key != API_KEY:
+def verify_api_key(
+    api_key: str = Security(api_key_header),
+    rapidapi_key: str = Security(rapidapi_key_header),
+):
+    key = api_key or rapidapi_key
+    if key != API_KEY:
         raise HTTPException(status_code=401, detail="Invalid API Key")
 
 
@@ -35,6 +37,9 @@ app = FastAPI(
     version="1.0.0"
 )
 
+@app.get("/health")
+def health():
+    return {"status": "ok"}
 
 # Helpers
 
@@ -42,7 +47,11 @@ def read_csv_safe(file: UploadFile) -> pd.DataFrame:
     if not file.filename.endswith(".csv"):
         raise HTTPException(status_code=400, detail="Only CSV files are supported")
 
-    if file.size and file.size > MAX_FILE_SIZE:
+    file.file.seek(0, os.SEEK_END)
+    size = file.file.tell()
+    file.file.seek(0)
+
+    if size > MAX_FILE_SIZE:
         raise HTTPException(status_code=413, detail="File too large (max 10MB)")
 
     try:
@@ -88,6 +97,9 @@ async def clean_json(
     payload: List[Dict[str, Any]],
     _: str = Depends(verify_api_key)
 ):
+    if not payload:
+        raise HTTPException(status_code=400, detail="Payload cannot be empty")
+
     if len(payload) > MAX_ROWS:
         raise HTTPException(status_code=413, detail="Too many rows (max 100,000)")
 

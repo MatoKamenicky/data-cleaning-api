@@ -40,33 +40,13 @@ git clone https://github.com/your-username/data-cleaning-api.git
 cd data-cleaning-api
 ```
 
-### 2️⃣ Create virtual environment
-
-``` bash
-python -m venv venv
-```
-
-Activate it:
-
-**Linux / macOS**
-
-``` bash
-source venv/bin/activate
-```
-
-**Windows**
-
-``` powershell
-venv\Scripts\activate
-```
-
-### 3️⃣ Install dependencies
+### 2️⃣ Install dependencies
 
 ``` bash
 pip install -r requirements.txt
 ```
 
-### 4️⃣ Set API key
+### 3️⃣ Set API key
 
 **Windows (PowerShell)**
 
@@ -80,7 +60,7 @@ $env:API_KEY="your-api-key"
 export API_KEY=your-api-key
 ```
 
-### 5️⃣ Run server
+### 4️⃣ Run server
 
 ``` bash
 uvicorn app.main:app --reload
