@@ -36,7 +36,7 @@ All endpoints require an API key sent via HTTP header:
 ### 1️⃣ Clone repository
 
 ``` bash
-git clone https://github.com/your-username/data-cleaning-api.git
+git clone https://github.com/MatoKamenicky/data-cleaning-api.git
 cd data-cleaning-api
 ```
 
