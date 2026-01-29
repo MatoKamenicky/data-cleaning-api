@@ -24,8 +24,12 @@ def verify_api_key(
     api_key: str = Security(api_key_header),
     rapidapi_key: str = Security(rapidapi_key_header),
 ):
-    key = api_key or rapidapi_key
-    if key != API_KEY:
+    # RapidAPI request
+    if rapidapi_key:
+        return
+
+    # Direct access (dev / internal)
+    if api_key != API_KEY:
         raise HTTPException(status_code=401, detail="Invalid API Key")
 
 
